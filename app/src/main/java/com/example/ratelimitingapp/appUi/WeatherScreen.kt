@@ -50,9 +50,9 @@ fun WeatherScreen(
     val errorMessage = viewModel.errorMessage
 
     // Show toast when errorMessage updates
-    LaunchedEffect(errorMessage) {
-        errorMessage?.let {
-            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+    LaunchedEffect(viewModel.errorMessageCounter) {
+        viewModel.errorMessage?.let { message ->
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -64,7 +64,7 @@ fun WeatherScreen(
         GoogleMap(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(0.5f),
+                .weight(0.7f),
             cameraPositionState = cameraPosition,
             onMapClick = { latLng ->
                 selectedLatLng = latLng
@@ -87,15 +87,17 @@ fun WeatherScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         viewModel.weatherData?.let {
-            Column {
+            Column(
+                modifier = Modifier.fillMaxWidth().weight(0.3f)
+            ) {
                 Text("Timezone: ${it.timezone}")
                 Text("Temperature: ${it.current.temp}°C")
                 Text("Condition: ${it.current.weather.firstOrNull()?.description ?: "N/A"}")
             }
         }
 
-        viewModel.errorMessage?.let {
-            Text("Error: $it", color = Color.Red)
-        }
+//        viewModel.errorMessage?.let {
+//            Text("Error: $it", color = Color.Red)
+//        }
     }
 }
